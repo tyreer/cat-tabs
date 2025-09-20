@@ -1,5 +1,6 @@
-import { useCallback, useState } from 'react';
 import styled from 'styled-components';
+
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 
 export interface TabObject {
@@ -30,23 +31,23 @@ const StyledTabList = styled.div`
 `;
 
 const StyledTab = styled.button<{ $isActive: boolean }>`
-  background-color: ${props => props.$isActive ? '#ffffff' : '#c0c0c0'};
-  border: 2px ${props => props.$isActive ? 'inset' : 'outset'} #c0c0c0;
+  background-color: ${(props) => (props.$isActive ? '#ffffff' : '#c0c0c0')};
+  border: 2px ${(props) => (props.$isActive ? 'inset' : 'outset')} #c0c0c0;
   padding: 4px 12px;
   font-family: 'Courier New', monospace;
   font-size: 12px;
   color: #000000;
   cursor: pointer;
   min-width: 60px;
-  
+
   &:hover {
-    background-color: ${props => props.$isActive ? '#ffffff' : '#d4d0c8'};
+    background-color: ${(props) => (props.$isActive ? '#ffffff' : '#d4d0c8')};
   }
-  
+
   &:active {
     border: 2px inset #c0c0c0;
   }
-  
+
   &:focus {
     outline: 2px solid #000080;
     outline-offset: 1px;
@@ -54,33 +55,44 @@ const StyledTab = styled.button<{ $isActive: boolean }>`
 `;
 
 const StyledTabPanel = styled.div<{ $isActive: boolean }>`
-  display: ${props => props.$isActive ? 'block' : 'none'};
+  display: ${(props) => (props.$isActive ? 'block' : 'none')};
   background-color: #ffffff;
   border: 2px inset #c0c0c0;
   padding: 8px;
   min-height: 200px;
 `;
 
-function TabList({
+const TabList = React.forwardRef<HTMLDivElement, {
+  children: ReactNode;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
+} & React.HTMLAttributes<HTMLDivElement>>(({
   children,
+  onKeyDown,
   ...props
-}: { children: ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
+}, ref) => {
   return (
-    <StyledTabList role="tablist" {...props}>
+    <StyledTabList 
+      ref={ref}
+      role="tablist" 
+      onKeyDown={onKeyDown}
+      {...props}
+    >
       {children}
     </StyledTabList>
   );
-}
+});
 
 function Tab({
   tab,
   isActive,
   onClick,
+  onKeyDown,
   ...props
 }: {
   tab: TabObject;
   isActive: boolean;
   onClick: () => void;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
 } & React.HTMLAttributes<HTMLButtonElement>) {
   return (
     <StyledTab
@@ -89,6 +101,7 @@ function Tab({
       aria-selected={isActive}
       $isActive={isActive}
       onClick={onClick}
+      onKeyDown={onKeyDown}
       {...props}
     >
       {tab.label}
@@ -133,6 +146,9 @@ export default function Tabs({
   // Get the current active tab ID
   const currentActiveTabId = isControlled ? activeTabId : internalActiveTabId;
 
+  // Ref for the tablist container
+  const tabListRef = useRef<HTMLDivElement>(null);
+
   // Handle tab click
   const handleTabClick = useCallback(
     (tabId: string) => {
@@ -148,15 +164,57 @@ export default function Tabs({
     [isControlled, onTabChange, tabs]
   );
 
+  // Handle keyboard navigation
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      const { key } = event;
+      
+      if (key === 'ArrowLeft' || key === 'ArrowRight') {
+        event.preventDefault();
+        
+        const currentIndex = tabs.findIndex(tab => tab.id === currentActiveTabId);
+        let nextIndex: number;
+        
+        if (key === 'ArrowLeft') {
+          nextIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
+        } else {
+          nextIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0;
+        }
+        
+        const nextTab = tabs[nextIndex];
+        if (nextTab) {
+          // Update the active tab first
+          if (!isControlled) {
+            setInternalActiveTabId(nextTab.id);
+          }
+          
+          // Call the callback
+          if (onTabChange) {
+            onTabChange(nextTab);
+          }
+          
+          // Focus the next tab
+          const nextTabElement = tabListRef.current?.querySelector(`#tab-${nextTab.id}`) as HTMLButtonElement;
+          nextTabElement?.focus();
+        }
+      }
+    },
+    [tabs, currentActiveTabId, isControlled, onTabChange]
+  );
+
   return (
     <StyledTabsContainer>
-      <TabList aria-label={ariaLabel}>
+      <TabList 
+        ref={tabListRef}
+        aria-label={ariaLabel}
+      >
         {tabs.map((tab) => (
           <Tab
             key={tab.id}
             tab={tab}
             isActive={tab.id === currentActiveTabId}
             onClick={() => handleTabClick(tab.id)}
+            onKeyDown={handleKeyDown}
           />
         ))}
       </TabList>

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { Tabs } from './components';
 
 const AppContainer = styled.div`

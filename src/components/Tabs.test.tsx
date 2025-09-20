@@ -147,4 +147,78 @@ describe('Tabs Component', () => {
       expect(screen.getByRole('tab', { name: 'Tab 2' })).toHaveAttribute('aria-selected', 'true');
     });
   });
+
+  describe('Keyboard Navigation', () => {
+    it('navigates to next tab with right arrow key', async () => {
+      const user = userEvent.setup();
+      render(<Tabs tabs={mockTabs} />);
+      
+      const firstTab = screen.getByRole('tab', { name: 'Tab 1' });
+      await user.click(firstTab);
+      await user.keyboard('{ArrowRight}');
+      
+      expect(screen.getByRole('tab', { name: 'Tab 2' })).toHaveAttribute('aria-selected', 'true');
+      expect(screen.getByText('Content 2')).toBeVisible();
+    });
+
+    it('navigates to previous tab with left arrow key', async () => {
+      const user = userEvent.setup();
+      render(<Tabs tabs={mockTabs} activeTabId="tab2" />);
+      
+      const secondTab = screen.getByRole('tab', { name: 'Tab 2' });
+      await user.click(secondTab);
+      await user.keyboard('{ArrowLeft}');
+      
+      expect(screen.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'true');
+      expect(screen.getByText('Content 1')).toBeVisible();
+    });
+
+    it('wraps to last tab when pressing left arrow on first tab', async () => {
+      const user = userEvent.setup();
+      render(<Tabs tabs={mockTabs} activeTabId="tab1" />);
+      
+      const firstTab = screen.getByRole('tab', { name: 'Tab 1' });
+      await user.click(firstTab);
+      await user.keyboard('{ArrowLeft}');
+      
+      expect(screen.getByRole('tab', { name: 'Tab 3' })).toHaveAttribute('aria-selected', 'true');
+      expect(screen.getByText('Content 3')).toBeVisible();
+    });
+
+    it('wraps to first tab when pressing right arrow on last tab', async () => {
+      const user = userEvent.setup();
+      render(<Tabs tabs={mockTabs} activeTabId="tab3" />);
+      
+      const thirdTab = screen.getByRole('tab', { name: 'Tab 3' });
+      await user.click(thirdTab);
+      await user.keyboard('{ArrowRight}');
+      
+      expect(screen.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'true');
+      expect(screen.getByText('Content 1')).toBeVisible();
+    });
+
+    it('calls onTabChange callback when navigating with arrow keys', async () => {
+      const onTabChange = vi.fn();
+      const user = userEvent.setup();
+      render(<Tabs tabs={mockTabs} onTabChange={onTabChange} />);
+      
+      const firstTab = screen.getByRole('tab', { name: 'Tab 1' });
+      await user.click(firstTab);
+      await user.keyboard('{ArrowRight}');
+      
+      expect(onTabChange).toHaveBeenCalledWith(mockTabs[1]);
+    });
+
+    it('focuses the correct tab after keyboard navigation', async () => {
+      const user = userEvent.setup();
+      render(<Tabs tabs={mockTabs} />);
+      
+      const firstTab = screen.getByRole('tab', { name: 'Tab 1' });
+      await user.click(firstTab);
+      await user.keyboard('{ArrowRight}');
+      
+      const secondTab = screen.getByRole('tab', { name: 'Tab 2' });
+      expect(secondTab).toHaveFocus();
+    });
+  });
 });
