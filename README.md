@@ -66,41 +66,18 @@ https://tyreer.github.io/cat-tabs/
 - **Screen Reader Support** - Full compatibility with assistive technologies
 - **Keyboard Navigation** - Complete keyboard accessibility
 - **Focus Management** - Proper focus indicators and movement
-- **ARIA Attributes** - All required ARIA roles and properties
-- **Semantic HTML** - Proper semantic structure
-
-### 🎨 Styling & Design
-
-- **Retro Windows 95 Aesthetic** - Authentic old-school interface
-- **3D Beveled Effects** - Classic raised/inset button styling
-- **Responsive Design** - Works on all screen sizes
-- **Customizable** - Easy to theme and modify
-- **Styled Components** - CSS-in-JS with TypeScript support
 
 ### 🧪 Testing & Quality
 
-- **100% Test Coverage** - 36/36 tests passing
 - **User Interaction Testing** - Comprehensive user behavior testing following [Testing Library query priority guidelines](https://testing-library.com/docs/queries/about#priority)
 - **Accessibility Testing** - ARIA and screen reader testing
 - **Edge Case Testing** - Error handling and validation testing
-- **Performance Optimized** - React.memo and useCallback optimizations
 
 ### Dependencies
 
 - `react` & `react-dom` - React framework
 - `styled-components` - CSS-in-JS styling
 - `@types/styled-components` - TypeScript definitions
-
-### Dev Dependencies
-
-- `@vitejs/plugin-react` - Vite React plugin
-- `typescript` - TypeScript compiler
-- `vitest` - Testing framework
-- `@testing-library/react` - React testing utilities
-- `@testing-library/jest-dom` - Custom Jest matchers
-- `@testing-library/user-event` - User interaction testing
-- `jsdom` - DOM environment for testing
-- `eslint` - Code linting
 
 ## 📁 Project Structure
 
@@ -172,25 +149,12 @@ function App() {
 }
 ```
 
-### With Custom Styling
-
-The component uses styled-components with a 90s style:
-
-- **3D Beveled Effects** - Classic raised/inset button styling
-- **Retro Color Scheme** - Gray backgrounds with blue accents
-- **Pixelated Typography** - Courier New monospace font
-- **Authentic Interactions** - Hover, focus, and active states
-
 ## 🧪 Testing
 
 The project includes comprehensive testing with **36/36 tests passing**:
 
 - **Vitest** - Fast test runner with Jest-compatible API
 - **React Testing Library** - User-focused testing utilities
-- **User Event** - Realistic user interaction simulation
-- **JSDOM** - Browser-like environment for tests
-
-### Test Coverage
 
 - ✅ **User Interaction Tests** - Click, keyboard, and focus navigation
 - ✅ **Accessibility Tests** - ARIA attributes and screen reader compatibility
@@ -213,10 +177,6 @@ npm run test:ui
 # Run tests without type checking
 npm run test:only
 ```
-
-### Demo Application
-
-The project includes a live demo with 8 cat images named "Hans 1" through "Hans 8":
 
 **Local Development:**
 
@@ -254,64 +214,3 @@ This implementation follows established best practices and guidelines:
 - **[[Margin considered harmful]](https://mxstbr.com/thoughts/margin)** - Guidelines for spacing and layout via Max Stoiber
 
 These resources informed our implementation decisions for accessibility, testing, and styling approaches.
-
-## 🚀 GitHub Pages Deployment
-
-This project is configured for automatic deployment to GitHub Pages:
-
-### Setup Instructions
-
-1. **Push to GitHub:**
-
-   ```bash
-   git add .
-   git commit -m "feat: add GitHub Pages deployment configuration"
-   git push origin main
-   ```
-
-2. **Enable GitHub Pages:**
-   - Go to your repository on GitHub
-   - Navigate to Settings → Pages
-   - Under "Source", select "GitHub Actions"
-   - The workflow will automatically deploy your site
-   - **Important:** Make sure your repository has "Pages" enabled in Settings → Actions → General → Workflow permissions
-
-3. **Update Repository Name:**
-   - Edit `vite.config.ts` and replace `'Tabs'` with your actual repository name
-   - Update the demo link in README.md with your GitHub username
-
-### Deployment Features
-
-- ✅ **Automatic Deployment** - Deploys on every push to `main` branch
-- ✅ **Test Integration** - Runs tests before deployment
-- ✅ **Build Optimization** - Production-optimized build
-- ✅ **GitHub Actions** - No manual deployment needed
-
-### Manual Deployment
-
-If you need to deploy manually:
-
-```bash
-npm run build
-# Upload the 'dist' folder contents to your web server
-```
-
-Your site will be available at: `https://your-username.github.io/your-repo-name/`
-
-### Troubleshooting
-
-**If deployment fails with permission errors:**
-
-1. **Check Repository Settings:**
-   - Go to Settings → Actions → General
-   - Under "Workflow permissions", select "Read and write permissions"
-   - Check "Allow GitHub Actions to create and approve pull requests"
-
-2. **Verify Pages Settings:**
-   - Go to Settings → Pages
-   - Source should be set to "GitHub Actions"
-   - If you see "gh-pages" as an option, make sure it's set to "GitHub Actions" instead
-
-3. **Check Workflow Permissions:**
-   - The workflow now includes proper permissions for Pages deployment
-   - No personal access tokens needed - uses built-in GITHUB_TOKEN
