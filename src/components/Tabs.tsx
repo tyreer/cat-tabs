@@ -62,6 +62,42 @@ const StyledTabPanel = styled.div<{ $isActive: boolean }>`
   min-height: 200px;
 `;
 
+const ErrorContainer = styled.div`
+  background-color: #ffcccc;
+  border: 2px inset #ff0000;
+  padding: 12px;
+  margin: 8px 0;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #000000;
+`;
+
+const ErrorTitle = styled.h3`
+  margin: 0 0 8px 0;
+  color: #ff0000;
+  font-size: 14px;
+  font-weight: bold;
+`;
+
+const ErrorList = styled.ul`
+  margin: 0;
+  padding-left: 16px;
+`;
+
+const ErrorItem = styled.li`
+  margin: 4px 0;
+`;
+
+const EmptyStateContainer = styled.div`
+  background-color: #f0f0f0;
+  border: 2px inset #c0c0c0;
+  padding: 20px;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #666666;
+`;
+
 const TabList = React.forwardRef<
   HTMLDivElement,
   {
@@ -138,12 +174,47 @@ export default function Tabs({
   onTabChange,
   'aria-label': ariaLabel,
 }: TabsProps) {
+  // Validation state
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+
+  // Validate tabs on mount
+  useEffect(() => {
+    const errors: string[] = [];
+    
+    // Check for empty tabs array
+    if (!tabs || tabs.length === 0) {
+      errors.push('No tabs provided. Please provide at least one tab.');
+    } else {
+      // Check for required properties
+      tabs.forEach((tab, index) => {
+        if (!tab.id) {
+          errors.push(`Tab at index ${index} is missing required 'id' property.`);
+        }
+        if (!tab.label) {
+          errors.push(`Tab at index ${index} is missing required 'label' property.`);
+        }
+        if (tab.content === undefined || tab.content === null) {
+          errors.push(`Tab at index ${index} is missing required 'content' property.`);
+        }
+      });
+
+      // Check for duplicate IDs
+      const ids = tabs.map(tab => tab.id).filter(Boolean);
+      const uniqueIds = new Set(ids);
+      if (ids.length !== uniqueIds.size) {
+        errors.push('All tabs must have unique IDs.');
+      }
+    }
+
+    setValidationErrors(errors);
+  }, [tabs]);
+
   // Determine if component is controlled or uncontrolled
   const isControlled = activeTabId !== undefined;
 
   // Internal state for uncontrolled mode
   const [internalActiveTabId, setInternalActiveTabId] = useState(
-    tabs[0]?.id || ''
+    (tabs && tabs.length > 0) ? tabs[0].id : ''
   );
 
   // Get the current active tab ID
@@ -226,6 +297,33 @@ export default function Tabs({
     },
     [tabs, currentActiveTabId, isControlled, onTabChange]
   );
+
+  // Show error messages if validation failed
+  if (validationErrors.length > 0) {
+    return (
+      <StyledTabsContainer>
+        <ErrorContainer>
+          <ErrorTitle>⚠️ Tabs Component Error</ErrorTitle>
+          <ErrorList>
+            {validationErrors.map((error, index) => (
+              <ErrorItem key={index}>{error}</ErrorItem>
+            ))}
+          </ErrorList>
+        </ErrorContainer>
+      </StyledTabsContainer>
+    );
+  }
+
+  // Show empty state if no tabs
+  if (!tabs || tabs.length === 0) {
+    return (
+      <StyledTabsContainer>
+        <EmptyStateContainer>
+          <p>No tabs to display.</p>
+        </EmptyStateContainer>
+      </StyledTabsContainer>
+    );
+  }
 
   return (
     <StyledTabsContainer>

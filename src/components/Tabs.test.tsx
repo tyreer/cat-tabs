@@ -305,4 +305,110 @@ describe('Tabs Component', () => {
       expect(secondTab).toHaveFocus();
     });
   });
+
+  describe('Error Handling & Validation', () => {
+    it('displays error message for empty tabs array', () => {
+      render(<Tabs tabs={[]} />);
+      
+      expect(screen.getByText('⚠️ Tabs Component Error')).toBeInTheDocument();
+      expect(screen.getByText('No tabs provided. Please provide at least one tab.')).toBeInTheDocument();
+    });
+
+    it('displays error message for missing id property', () => {
+      const invalidTabs = [
+        { label: 'Tab 1', content: <div>Content 1</div> },
+        { id: 'tab2', label: 'Tab 2', content: <div>Content 2</div> },
+      ];
+      
+      render(<Tabs tabs={invalidTabs} />);
+      
+      expect(screen.getByText('⚠️ Tabs Component Error')).toBeInTheDocument();
+      expect(screen.getByText('Tab at index 0 is missing required \'id\' property.')).toBeInTheDocument();
+    });
+
+    it('displays error message for missing label property', () => {
+      const invalidTabs = [
+        { id: 'tab1', content: <div>Content 1</div> },
+        { id: 'tab2', label: 'Tab 2', content: <div>Content 2</div> },
+      ];
+      
+      render(<Tabs tabs={invalidTabs} />);
+      
+      expect(screen.getByText('⚠️ Tabs Component Error')).toBeInTheDocument();
+      expect(screen.getByText('Tab at index 0 is missing required \'label\' property.')).toBeInTheDocument();
+    });
+
+    it('displays error message for missing content property', () => {
+      const invalidTabs = [
+        { id: 'tab1', label: 'Tab 1' },
+        { id: 'tab2', label: 'Tab 2', content: <div>Content 2</div> },
+      ];
+      
+      render(<Tabs tabs={invalidTabs} />);
+      
+      expect(screen.getByText('⚠️ Tabs Component Error')).toBeInTheDocument();
+      expect(screen.getByText('Tab at index 0 is missing required \'content\' property.')).toBeInTheDocument();
+    });
+
+    it('displays error message for duplicate IDs', () => {
+      const invalidTabs = [
+        { id: 'tab1', label: 'Tab 1', content: <div>Content 1</div> },
+        { id: 'tab1', label: 'Tab 2', content: <div>Content 2</div> },
+      ];
+      
+      render(<Tabs tabs={invalidTabs} />);
+      
+      expect(screen.getByText('⚠️ Tabs Component Error')).toBeInTheDocument();
+      expect(screen.getByText('All tabs must have unique IDs.')).toBeInTheDocument();
+    });
+
+    it('displays multiple error messages for multiple issues', () => {
+      const invalidTabs = [
+        { label: 'Tab 1' }, // missing id and content
+        { id: 'tab2', content: <div>Content 2</div> }, // missing label
+      ];
+      
+      render(<Tabs tabs={invalidTabs} />);
+      
+      expect(screen.getByText('⚠️ Tabs Component Error')).toBeInTheDocument();
+      expect(screen.getByText('Tab at index 0 is missing required \'id\' property.')).toBeInTheDocument();
+      expect(screen.getByText('Tab at index 0 is missing required \'content\' property.')).toBeInTheDocument();
+      expect(screen.getByText('Tab at index 1 is missing required \'label\' property.')).toBeInTheDocument();
+    });
+
+    it('shows empty state message when tabs array is null', () => {
+      render(<Tabs tabs={null as any} />);
+      
+      expect(screen.getByText('No tabs to display.')).toBeInTheDocument();
+    });
+
+    it('shows empty state message when tabs array is undefined', () => {
+      render(<Tabs tabs={undefined as any} />);
+      
+      expect(screen.getByText('No tabs to display.')).toBeInTheDocument();
+    });
+
+    it('validates tabs on prop changes', () => {
+      const { rerender } = render(<Tabs tabs={mockTabs} />);
+      
+      // Initially should work fine
+      expect(screen.getByRole('tablist')).toBeInTheDocument();
+      
+      // Change to invalid tabs
+      const invalidTabs = [{ label: 'Tab 1' }];
+      rerender(<Tabs tabs={invalidTabs} />);
+      
+      // Should now show error
+      expect(screen.getByText('⚠️ Tabs Component Error')).toBeInTheDocument();
+    });
+
+    it('does not break existing functionality with valid tabs', () => {
+      render(<Tabs tabs={mockTabs} />);
+      
+      // Should work normally with valid tabs
+      expect(screen.getByRole('tablist')).toBeInTheDocument();
+      expect(screen.getAllByRole('tab')).toHaveLength(3);
+      expect(screen.getByText('Content 1')).toBeVisible();
+    });
+  });
 });
