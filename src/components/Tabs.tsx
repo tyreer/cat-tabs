@@ -1,34 +1,18 @@
 import type { ReactNode } from 'react';
 
-/**
- * Represents a single tab object with required properties
- */
 export interface TabObject {
-  /** Unique identifier for the tab */
   id: string;
-  /** Display label for the tab */
   label: string;
-  /** Content to render in the tab panel */
   content: ReactNode;
 }
 
-/**
- * Props for the Tabs component
- */
 export interface TabsProps {
-  /** Array of tab objects to render */
   tabs: TabObject[];
-  /** Active tab ID for controlled mode */
   activeTabId?: string;
-  /** Callback fired when tab changes */
   onTabChange?: (activeTab: TabObject) => void;
-  /** Accessible label for the tablist */
   'aria-label'?: string;
 }
 
-/**
- * TabList sub-component with proper ARIA role
- */
 function TabList({ children, ...props }: { children: ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div role="tablist" {...props}>
@@ -37,9 +21,6 @@ function TabList({ children, ...props }: { children: ReactNode } & React.HTMLAtt
   );
 }
 
-/**
- * Tab sub-component with proper ARIA role
- */
 function Tab({ 
   tab, 
   isActive, 
@@ -62,9 +43,6 @@ function Tab({
   );
 }
 
-/**
- * TabPanel sub-component with proper ARIA role
- */
 function TabPanel({ 
   tab, 
   isActive, 
@@ -85,12 +63,6 @@ function TabPanel({
   );
 }
 
-/**
- * Tabs component - A fully accessible, ARIA-compliant tabs implementation
- * 
- * @param props - Component props
- * @returns JSX element
- */
 export default function Tabs({
   tabs,
   activeTabId,
