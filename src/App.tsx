@@ -18,51 +18,56 @@ const AppTitle = styled.h1`
   text-align: center;
 `;
 
-const ContentCard = styled.div`
-  background-color: #ffffff;
-  border: 2px outset #c0c0c0;
-  padding: 16px;
-  margin-top: 8px;
+const ImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 8px;
+`;
+
+const CatImage = styled.img`
+  max-width: 100%;
+  max-height: 500px;
+  border: 2px inset #c0c0c0;
+  object-fit: cover;
 `;
 
 function App() {
-  const tabs = [
-    {
-      id: 'tab1',
-      label: 'Photos',
-      content: (
-        <ContentCard>
-          <h3>Photo Gallery</h3>
-          <p>This is where photos would be displayed.</p>
-        </ContentCard>
-      ),
-    },
-    {
-      id: 'tab2',
-      label: 'Settings',
-      content: (
-        <ContentCard>
-          <h3>Settings</h3>
-          <p>Configure your preferences here.</p>
-        </ContentCard>
-      ),
-    },
-    {
-      id: 'tab3',
-      label: 'About',
-      content: (
-        <ContentCard>
-          <h3>About</h3>
-          <p>Learn more about this application.</p>
-        </ContentCard>
-      ),
-    },
+  // Available cat images
+  const catImages = [
+    'IMG_0328.webp',
+    'IMG_0920.webp',
+    'IMG_0992.webp',
+    'IMG_1544.webp',
+    'IMG_2145.webp',
+    'IMG_2280.webp',
+    'IMG_2399.webp',
+    'IMG_9330.webp',
   ];
+
+  // Create tabs - one for each cat image
+  const tabs = catImages.map((image, index) => ({
+    id: `hans-${index + 1}`,
+    label: `Hans ${index + 1}`,
+    content: (
+      <ImageContainer>
+        <CatImage
+          src={`/cat/${image}`}
+          alt={`Hans ${index + 1}: ${image}`}
+          onError={(e) => {
+            console.error('Failed to load image:', image);
+            e.currentTarget.style.display = 'none';
+          }}
+        />
+      </ImageContainer>
+    ),
+  }));
 
   return (
     <AppContainer>
-      <AppTitle>Tabs Component Demo</AppTitle>
-      <Tabs tabs={tabs} aria-label="Main navigation" />
+      <AppTitle>Tabs</AppTitle>
+      <Tabs tabs={tabs} aria-label="Hans cat gallery" />
     </AppContainer>
   );
 }
