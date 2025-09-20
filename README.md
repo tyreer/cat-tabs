@@ -7,7 +7,7 @@
 [![Vite](https://img.shields.io/badge/Vite-7.1.2-646CFF)](https://vitejs.dev/)
 [![Tests](https://img.shields.io/badge/Tests-36%2F36%20passing-brightgreen)](https://vitest.dev/)
 
-A fully accessible, ARIA-compliant Tabs component with retro Windows 95 styling, built with React, TypeScript, and styled-components.
+A fully accessible, ARIA-compliant Tabs component with 90s style and a cat, built with React, TypeScript, and styled-components.
 
 ![Tabs Component Demo](preview.png)
 
