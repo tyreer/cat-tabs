@@ -26,6 +26,7 @@ const StyledTabsContainer = styled.div`
 
 const StyledTabList = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 2px;
   margin-bottom: 2px;
 `;
@@ -40,6 +41,7 @@ const StyledTab = styled.button<{ $isActive: boolean }>`
   color: #000000;
   cursor: pointer;
   min-width: 60px;
+  flex: 0 0 auto;
   text-shadow: ${(props) =>
     props.$isActive ? 'none' : '1px 1px 1px rgba(255, 255, 255, 0.8)'};
   box-shadow: ${(props) =>
@@ -58,6 +60,18 @@ const StyledTab = styled.button<{ $isActive: boolean }>`
   &:focus {
     outline: 2px solid #000080;
     outline-offset: 1px;
+  }
+
+  @media (max-width: 768px) {
+    min-width: 50px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  @media (max-width: 480px) {
+    min-width: 45px;
+    padding: 3px 6px;
+    font-size: 10px;
   }
 `;
 
