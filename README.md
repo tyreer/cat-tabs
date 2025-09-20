@@ -216,12 +216,14 @@ npm run test:only
 The project includes a live demo with 8 cat images named "Hans 1" through "Hans 8":
 
 **Local Development:**
+
 ```bash
 npm run dev
 # Visit http://localhost:5175/
 ```
 
 **Live Demo:**
+
 - [GitHub Pages Demo](https://your-username.github.io/Tabs/) - Replace `your-username` with your GitHub username
 - Automatically deployed from the `main` branch
 - Updates automatically when you push changes
@@ -263,6 +265,7 @@ This project is configured for automatic deployment to GitHub Pages:
 ### Setup Instructions
 
 1. **Push to GitHub:**
+
    ```bash
    git add .
    git commit -m "feat: add GitHub Pages deployment configuration"
@@ -289,6 +292,7 @@ This project is configured for automatic deployment to GitHub Pages:
 ### Manual Deployment
 
 If you need to deploy manually:
+
 ```bash
 npm run build
 # Upload the 'dist' folder contents to your web server

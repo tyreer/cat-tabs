@@ -13,6 +13,7 @@
     "test:run": "npm run test:typecheck && vitest run",
     "test:typecheck": "tsc --noEmit",
     "test:only": "vitest run",
+    "test:ci": "NODE_OPTIONS='--no-experimental-fetch' npm run test:run",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
