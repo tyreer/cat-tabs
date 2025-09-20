@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
+import styled from 'styled-components';
 import type { ReactNode } from 'react';
 
 export interface TabObject {
@@ -14,14 +15,60 @@ export interface TabsProps {
   'aria-label'?: string;
 }
 
+// Styled Components for Old-School Windows Interface
+const StyledTabsContainer = styled.div`
+  font-family: 'Courier New', monospace;
+  background-color: #c0c0c0;
+  border: 2px inset #c0c0c0;
+  padding: 4px;
+`;
+
+const StyledTabList = styled.div`
+  display: flex;
+  gap: 2px;
+  margin-bottom: 2px;
+`;
+
+const StyledTab = styled.button<{ $isActive: boolean }>`
+  background-color: ${props => props.$isActive ? '#ffffff' : '#c0c0c0'};
+  border: 2px ${props => props.$isActive ? 'inset' : 'outset'} #c0c0c0;
+  padding: 4px 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #000000;
+  cursor: pointer;
+  min-width: 60px;
+  
+  &:hover {
+    background-color: ${props => props.$isActive ? '#ffffff' : '#d4d0c8'};
+  }
+  
+  &:active {
+    border: 2px inset #c0c0c0;
+  }
+  
+  &:focus {
+    outline: 2px solid #000080;
+    outline-offset: 1px;
+  }
+`;
+
+const StyledTabPanel = styled.div<{ $isActive: boolean }>`
+  display: ${props => props.$isActive ? 'block' : 'none'};
+  background-color: #ffffff;
+  border: 2px inset #c0c0c0;
+  padding: 8px;
+  min-height: 200px;
+`;
+
 function TabList({
   children,
   ...props
 }: { children: ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div role="tablist" {...props}>
+    <StyledTabList role="tablist" {...props}>
       {children}
-    </div>
+    </StyledTabList>
   );
 }
 
@@ -36,15 +83,16 @@ function Tab({
   onClick: () => void;
 } & React.HTMLAttributes<HTMLButtonElement>) {
   return (
-    <button
+    <StyledTab
       id={`tab-${tab.id}`}
       role="tab"
       aria-selected={isActive}
+      $isActive={isActive}
       onClick={onClick}
       {...props}
     >
       {tab.label}
-    </button>
+    </StyledTab>
   );
 }
 
@@ -57,14 +105,14 @@ function TabPanel({
   isActive: boolean;
 } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
+    <StyledTabPanel
       role="tabpanel"
       aria-labelledby={`tab-${tab.id}`}
-      hidden={!isActive}
+      $isActive={isActive}
       {...props}
     >
       {tab.content}
-    </div>
+    </StyledTabPanel>
   );
 }
 
@@ -76,30 +124,32 @@ export default function Tabs({
 }: TabsProps) {
   // Determine if component is controlled or uncontrolled
   const isControlled = activeTabId !== undefined;
-  
+
   // Internal state for uncontrolled mode
-  const [internalActiveTabId, setInternalActiveTabId] = useState(tabs[0]?.id || '');
-  
+  const [internalActiveTabId, setInternalActiveTabId] = useState(
+    tabs[0]?.id || ''
+  );
+
   // Get the current active tab ID
   const currentActiveTabId = isControlled ? activeTabId : internalActiveTabId;
-  
-  // Find the active tab object
-  const activeTab = tabs.find(tab => tab.id === currentActiveTabId) || tabs[0];
-  
+
   // Handle tab click
-  const handleTabClick = useCallback((tabId: string) => {
-    if (!isControlled) {
-      setInternalActiveTabId(tabId);
-    }
-    
-    const clickedTab = tabs.find(tab => tab.id === tabId);
-    if (clickedTab && onTabChange) {
-      onTabChange(clickedTab);
-    }
-  }, [isControlled, onTabChange, tabs]);
-  
+  const handleTabClick = useCallback(
+    (tabId: string) => {
+      if (!isControlled) {
+        setInternalActiveTabId(tabId);
+      }
+
+      const clickedTab = tabs.find((tab) => tab.id === tabId);
+      if (clickedTab && onTabChange) {
+        onTabChange(clickedTab);
+      }
+    },
+    [isControlled, onTabChange, tabs]
+  );
+
   return (
-    <div>
+    <StyledTabsContainer>
       <TabList aria-label={ariaLabel}>
         {tabs.map((tab) => (
           <Tab
@@ -117,6 +167,6 @@ export default function Tabs({
           isActive={tab.id === currentActiveTabId}
         />
       ))}
-    </div>
+    </StyledTabsContainer>
   );
 }
