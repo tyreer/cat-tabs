@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 
 export interface TabObject {
@@ -13,7 +14,10 @@ export interface TabsProps {
   'aria-label'?: string;
 }
 
-function TabList({ children, ...props }: { children: ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
+function TabList({
+  children,
+  ...props
+}: { children: ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div role="tablist" {...props}>
       {children}
@@ -21,18 +25,19 @@ function TabList({ children, ...props }: { children: ReactNode } & React.HTMLAtt
   );
 }
 
-function Tab({ 
-  tab, 
-  isActive, 
-  onClick, 
-  ...props 
-}: { 
-  tab: TabObject; 
-  isActive: boolean; 
-  onClick: () => void; 
+function Tab({
+  tab,
+  isActive,
+  onClick,
+  ...props
+}: {
+  tab: TabObject;
+  isActive: boolean;
+  onClick: () => void;
 } & React.HTMLAttributes<HTMLButtonElement>) {
   return (
     <button
+      id={`tab-${tab.id}`}
       role="tab"
       aria-selected={isActive}
       onClick={onClick}
@@ -43,13 +48,13 @@ function Tab({
   );
 }
 
-function TabPanel({ 
-  tab, 
-  isActive, 
-  ...props 
-}: { 
-  tab: TabObject; 
-  isActive: boolean; 
+function TabPanel({
+  tab,
+  isActive,
+  ...props
+}: {
+  tab: TabObject;
+  isActive: boolean;
 } & React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
@@ -69,11 +74,30 @@ export default function Tabs({
   onTabChange,
   'aria-label': ariaLabel,
 }: TabsProps) {
-  // TODO: Implement state management and event handlers
-  // Suppress unused variable warnings for now
-  console.log({ activeTabId, onTabChange });
+  // Determine if component is controlled or uncontrolled
+  const isControlled = activeTabId !== undefined;
   
-  // For now, just render the basic structure
+  // Internal state for uncontrolled mode
+  const [internalActiveTabId, setInternalActiveTabId] = useState(tabs[0]?.id || '');
+  
+  // Get the current active tab ID
+  const currentActiveTabId = isControlled ? activeTabId : internalActiveTabId;
+  
+  // Find the active tab object
+  const activeTab = tabs.find(tab => tab.id === currentActiveTabId) || tabs[0];
+  
+  // Handle tab click
+  const handleTabClick = useCallback((tabId: string) => {
+    if (!isControlled) {
+      setInternalActiveTabId(tabId);
+    }
+    
+    const clickedTab = tabs.find(tab => tab.id === tabId);
+    if (clickedTab && onTabChange) {
+      onTabChange(clickedTab);
+    }
+  }, [isControlled, onTabChange, tabs]);
+  
   return (
     <div>
       <TabList aria-label={ariaLabel}>
@@ -81,8 +105,8 @@ export default function Tabs({
           <Tab
             key={tab.id}
             tab={tab}
-            isActive={false} // TODO: Implement active state logic
-            onClick={() => {}} // TODO: Implement click handler
+            isActive={tab.id === currentActiveTabId}
+            onClick={() => handleTabClick(tab.id)}
           />
         ))}
       </TabList>
@@ -90,7 +114,7 @@ export default function Tabs({
         <TabPanel
           key={tab.id}
           tab={tab}
-          isActive={false} // TODO: Implement active state logic
+          isActive={tab.id === currentActiveTabId}
         />
       ))}
     </div>

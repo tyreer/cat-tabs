@@ -10,42 +10,42 @@ Building a fully accessible, ARIA-compliant Tabs component with React, TypeScrip
 
 ### Step 1: Project Structure & Type Definitions
 
-- [ ] Create `src/components/Tabs.tsx` with basic functional component structure
-- [ ] Define `TabObject` interface with `id: string`, `label: string`, `content: ReactNode`
-- [ ] Define `TabsProps` interface with all required props
-- [ ] Set up basic component export with proper TypeScript typing
-- [ ] Create/update `src/components/index.ts` to export Tabs component
-- [ ] Verify TypeScript compilation without errors
-- [ ] Ensure component structure exists and exports work
+- [x] Create `src/components/Tabs.tsx` with basic functional component structure
+- [x] Define `TabObject` interface with `id: string`, `label: string`, `content: ReactNode`
+- [x] Define `TabsProps` interface with all required props
+- [x] Set up basic component export with proper TypeScript typing
+- [x] Create/update `src/components/index.ts` to export Tabs component
+- [x] Verify TypeScript compilation without errors
+- [x] Ensure component structure exists and exports work
 
 ### Step 2: Basic Component Structure with ARIA
 
-- [ ] Create main `Tabs` component with props destructuring
-- [ ] Create `TabList` sub-component with `role="tablist"`
-- [ ] Create `Tab` sub-component with `role="tab"`
-- [ ] Create `TabPanel` sub-component with `role="tabpanel"`
-- [ ] Set up basic JSX structure rendering all tabs
-- [ ] Add proper ARIA attributes to all elements
-- [ ] Ensure all ARIA roles are present and correct
-- [ ] Test that component renders without errors
-- [ ] Test that all tabs are rendered
-- [ ] Test that ARIA roles are present
+- [x] Create main `Tabs` component with props destructuring
+- [x] Create `TabList` sub-component with `role="tablist"`
+- [x] Create `Tab` sub-component with `role="tab"`
+- [x] Create `TabPanel` sub-component with `role="tabpanel"`
+- [x] Set up basic JSX structure rendering all tabs
+- [x] Add proper ARIA attributes to all elements
+- [x] Ensure all ARIA roles are present and correct
+- [x] Test that component renders without errors
+- [x] Test that all tabs are rendered
+- [x] Test that ARIA roles are present
 
 ### Step 3: Basic State Management & Tab Switching
 
-- [ ] Add `useState` for active tab state (default to first tab)
-- [ ] Implement click handlers for tab switching
-- [ ] Add active tab highlighting (basic visual distinction)
-- [ ] Implement content panel switching (show/hide based on active tab)
-- [ ] Add controlled/uncontrolled support:
-  - [ ] If `activeTabId` prop provided, use it (controlled)
-  - [ ] Otherwise, use internal state (uncontrolled)
-- [ ] Call `onTabChange` callback when tabs change
-- [ ] Test tab switching on click
-- [ ] Test active tab highlighting
-- [ ] Test content changes
-- [ ] Test default active tab
-- [ ] Test controlled vs uncontrolled modes
+- [x] Add `useState` for active tab state (default to first tab)
+- [x] Implement click handlers for tab switching
+- [x] Add active tab highlighting (basic visual distinction)
+- [x] Implement content panel switching (show/hide based on active tab)
+- [x] Add controlled/uncontrolled support:
+  - [x] If `activeTabId` prop provided, use it (controlled)
+  - [x] Otherwise, use internal state (uncontrolled)
+- [x] Call `onTabChange` callback when tabs change
+- [x] Test tab switching on click
+- [x] Test active tab highlighting
+- [x] Test content changes
+- [x] Test default active tab
+- [x] Test controlled vs uncontrolled modes
 
 ---
 
