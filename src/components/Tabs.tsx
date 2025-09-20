@@ -125,7 +125,7 @@ function Tab({
   onClick: () => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   onFocus?: (tabId: string) => void;
-} & React.HTMLAttributes<HTMLButtonElement>) {
+} & Omit<React.HTMLAttributes<HTMLButtonElement>, 'onFocus'>) {
   const handleFocus = useCallback(() => {
     if (onFocus) {
       onFocus(tab.id);
@@ -180,29 +180,38 @@ export default function Tabs({
   // Validate tabs on mount
   useEffect(() => {
     const errors: string[] = [];
-    
-    // Check for empty tabs array
-    if (!tabs || tabs.length === 0) {
-      errors.push('No tabs provided. Please provide at least one tab.');
-    } else {
-      // Check for required properties
-      tabs.forEach((tab, index) => {
-        if (!tab.id) {
-          errors.push(`Tab at index ${index} is missing required 'id' property.`);
-        }
-        if (!tab.label) {
-          errors.push(`Tab at index ${index} is missing required 'label' property.`);
-        }
-        if (tab.content === undefined || tab.content === null) {
-          errors.push(`Tab at index ${index} is missing required 'content' property.`);
-        }
-      });
 
-      // Check for duplicate IDs
-      const ids = tabs.map(tab => tab.id).filter(Boolean);
-      const uniqueIds = new Set(ids);
-      if (ids.length !== uniqueIds.size) {
-        errors.push('All tabs must have unique IDs.');
+    // Only validate if tabs is an array (not null/undefined)
+    if (Array.isArray(tabs)) {
+      // Check for empty tabs array
+      if (tabs.length === 0) {
+        errors.push('No tabs provided. Please provide at least one tab.');
+      } else {
+        // Check for required properties
+        tabs.forEach((tab, index) => {
+          if (!tab.id) {
+            errors.push(
+              `Tab at index ${index} is missing required 'id' property.`
+            );
+          }
+          if (!tab.label) {
+            errors.push(
+              `Tab at index ${index} is missing required 'label' property.`
+            );
+          }
+          if (tab.content === undefined || tab.content === null) {
+            errors.push(
+              `Tab at index ${index} is missing required 'content' property.`
+            );
+          }
+        });
+
+        // Check for duplicate IDs
+        const ids = tabs.map((tab) => tab.id).filter(Boolean);
+        const uniqueIds = new Set(ids);
+        if (ids.length !== uniqueIds.size) {
+          errors.push('All tabs must have unique IDs.');
+        }
       }
     }
 
@@ -214,7 +223,7 @@ export default function Tabs({
 
   // Internal state for uncontrolled mode
   const [internalActiveTabId, setInternalActiveTabId] = useState(
-    (tabs && tabs.length > 0) ? tabs[0].id : ''
+    tabs && tabs.length > 0 ? tabs[0].id : ''
   );
 
   // Get the current active tab ID
