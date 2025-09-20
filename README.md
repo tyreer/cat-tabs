@@ -25,8 +25,7 @@ https://tyreer.github.io/cat-tabs/
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/tyreer/react-ts-template.git
-   cd dev-template
+   git clone https://github.com/tyreer/cat-tabs.git
    ```
 
 2. **Install dependencies:**
