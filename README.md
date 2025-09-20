@@ -224,7 +224,7 @@ npm run dev
 
 **Live Demo:**
 
-- [GitHub Pages Demo](https://your-username.github.io/Tabs/) - Replace `your-username` with your GitHub username
+- [GitHub Pages Demo](https://tyreer.github.io/cat-tabs/) - Live demo with Hans cat gallery
 - Automatically deployed from the `main` branch
 - Updates automatically when you push changes
 
