@@ -36,9 +36,16 @@ const StyledTab = styled.button<{ $isActive: boolean }>`
   padding: 4px 12px;
   font-family: 'Courier New', monospace;
   font-size: 12px;
+  font-weight: 900;
   color: #000000;
   cursor: pointer;
   min-width: 60px;
+  text-shadow: ${(props) =>
+    props.$isActive ? 'none' : '1px 1px 1px rgba(255, 255, 255, 0.8)'};
+  box-shadow: ${(props) =>
+    props.$isActive
+      ? 'inset 1px 1px 2px rgba(0, 0, 0, 0.1)'
+      : '1px 1px 2px rgba(0, 0, 0, 0.2)'};
 
   &:hover {
     background-color: ${(props) => (props.$isActive ? '#ffffff' : '#d4d0c8')};

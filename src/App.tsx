@@ -66,7 +66,7 @@ function App() {
 
   return (
     <AppContainer>
-      <AppTitle>Tabs</AppTitle>
+      <AppTitle>Cat tabs</AppTitle>
       <Tabs tabs={tabs} aria-label="Hans cat gallery" />
     </AppContainer>
   );
