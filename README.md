@@ -277,6 +277,7 @@ This project is configured for automatic deployment to GitHub Pages:
    - Navigate to Settings → Pages
    - Under "Source", select "GitHub Actions"
    - The workflow will automatically deploy your site
+   - **Important:** Make sure your repository has "Pages" enabled in Settings → Actions → General → Workflow permissions
 
 3. **Update Repository Name:**
    - Edit `vite.config.ts` and replace `'Tabs'` with your actual repository name
@@ -299,3 +300,21 @@ npm run build
 ```
 
 Your site will be available at: `https://your-username.github.io/your-repo-name/`
+
+### Troubleshooting
+
+**If deployment fails with permission errors:**
+
+1. **Check Repository Settings:**
+   - Go to Settings → Actions → General
+   - Under "Workflow permissions", select "Read and write permissions"
+   - Check "Allow GitHub Actions to create and approve pull requests"
+
+2. **Verify Pages Settings:**
+   - Go to Settings → Pages
+   - Source should be set to "GitHub Actions"
+   - If you see "gh-pages" as an option, make sure it's set to "GitHub Actions" instead
+
+3. **Check Workflow Permissions:**
+   - The workflow now includes proper permissions for Pages deployment
+   - No personal access tokens needed - uses built-in GITHUB_TOKEN
