@@ -98,6 +98,9 @@ export default function Tabs({
   'aria-label': ariaLabel,
 }: TabsProps) {
   // TODO: Implement state management and event handlers
+  // Suppress unused variable warnings for now
+  console.log({ activeTabId, onTabChange });
+  
   // For now, just render the basic structure
   return (
     <div>
