@@ -9,6 +9,10 @@
 
 A fully accessible, ARIA-compliant Tabs component with retro Windows 95 styling, built with React, TypeScript, and styled-components.
 
+![Tabs Component Demo](preview.png)
+
+https://tyreer.github.io/cat-tabs/
+
 ## 🛠️ Getting Started
 
 ### Prerequisites
@@ -221,12 +225,6 @@ The project includes a live demo with 8 cat images named "Hans 1" through "Hans 
 npm run dev
 # Visit http://localhost:5175/
 ```
-
-**Live Demo:**
-
-- [GitHub Pages Demo](https://tyreer.github.io/cat-tabs/) - Live demo with Hans cat gallery
-- Automatically deployed from the `main` branch
-- Updates automatically when you push changes
 
 ## 📝 Available Scripts
 
