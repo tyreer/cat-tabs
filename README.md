@@ -51,13 +51,15 @@ A fully accessible, ARIA-compliant Tabs component with retro Windows 95 styling,
 ## ✨ Features
 
 ### 🎯 Core Functionality
-- **Full ARIA Compliance** - Follows W3C ARIA Tabs pattern guidelines
+
+- **Full ARIA Compliance** - Follows [W3C ARIA Tabs pattern guidelines](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)
 - **Keyboard Navigation** - Arrow keys, Tab key, and focus management
 - **Automatic Activation** - Tabs activate when focused
 - **Controlled/Uncontrolled** - Supports both component patterns
 - **Error Handling** - Comprehensive validation with user-friendly messages
 
 ### ♿ Accessibility Features
+
 - **Screen Reader Support** - Full compatibility with assistive technologies
 - **Keyboard Navigation** - Complete keyboard accessibility
 - **Focus Management** - Proper focus indicators and movement
@@ -65,6 +67,7 @@ A fully accessible, ARIA-compliant Tabs component with retro Windows 95 styling,
 - **Semantic HTML** - Proper semantic structure
 
 ### 🎨 Styling & Design
+
 - **Retro Windows 95 Aesthetic** - Authentic old-school interface
 - **3D Beveled Effects** - Classic raised/inset button styling
 - **Responsive Design** - Works on all screen sizes
@@ -72,8 +75,9 @@ A fully accessible, ARIA-compliant Tabs component with retro Windows 95 styling,
 - **Styled Components** - CSS-in-JS with TypeScript support
 
 ### 🧪 Testing & Quality
+
 - **100% Test Coverage** - 36/36 tests passing
-- **User Interaction Testing** - Comprehensive user behavior testing
+- **User Interaction Testing** - Comprehensive user behavior testing following [Testing Library query priority guidelines](https://testing-library.com/docs/queries/about#priority)
 - **Accessibility Testing** - ARIA and screen reader testing
 - **Edge Case Testing** - Error handling and validation testing
 - **Performance Optimized** - React.memo and useCallback optimizations
@@ -126,13 +130,13 @@ const tabs = [
   {
     id: 'tab1',
     label: 'First Tab',
-    content: <div>Content for first tab</div>
+    content: <div>Content for first tab</div>,
   },
   {
-    id: 'tab2', 
+    id: 'tab2',
     label: 'Second Tab',
-    content: <div>Content for second tab</div>
-  }
+    content: <div>Content for second tab</div>,
+  },
 ];
 
 function App() {
@@ -144,18 +148,19 @@ function App() {
 
 ```tsx
 import { useState } from 'react';
+
 import { Tabs } from './components';
 
 function App() {
   const [activeTabId, setActiveTabId] = useState('tab1');
-  
+
   const handleTabChange = (activeTab) => {
     setActiveTabId(activeTab.id);
   };
 
   return (
-    <Tabs 
-      tabs={tabs} 
+    <Tabs
+      tabs={tabs}
       activeTabId={activeTabId}
       onTabChange={handleTabChange}
       aria-label="Controlled tabs"
@@ -166,7 +171,7 @@ function App() {
 
 ### With Custom Styling
 
-The component uses styled-components with a retro Windows 95 aesthetic:
+The component uses styled-components with a retro Windows 95 aesthetic, following [CSS margin best practices](https://mxstbr.com/thoughts/margin):
 
 - **3D Beveled Effects** - Classic raised/inset button styling
 - **Retro Color Scheme** - Gray backgrounds with blue accents
@@ -234,3 +239,13 @@ npm run dev
 - `tsconfig.json` - TypeScript configuration
 - `vitest.config.ts` - Vitest testing configuration
 - `.gitignore` - Comprehensive git ignore rules
+
+## 📚 References
+
+This implementation follows established best practices and guidelines:
+
+- **[W3C ARIA Authoring Practices Guide - Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)** - Official accessibility guidelines for tab interfaces
+- **[Testing Library Query Priority Guidelines](https://testing-library.com/docs/queries/about#priority)** - Best practices for semantic testing queries
+- **[CSS Margin Best Practices](https://mxstbr.com/thoughts/margin)** - Guidelines for spacing and layout in styled-components
+
+These resources informed our implementation decisions for accessibility, testing, and styling approaches.
