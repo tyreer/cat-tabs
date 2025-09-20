@@ -36,6 +36,7 @@ const CatImage = styled.img`
 function App() {
   // Available cat images
   const catImages = [
+    'IMG_9330.webp',
     'IMG_0328.webp',
     'IMG_0920.webp',
     'IMG_0992.webp',
@@ -43,8 +44,11 @@ function App() {
     'IMG_2145.webp',
     'IMG_2280.webp',
     'IMG_2399.webp',
-    'IMG_9330.webp',
   ];
+
+  // Get the correct base path for images
+  const basePath = import.meta.env.PROD ? '/cat-tabs' : '';
+  const imagePath = `${basePath}/cat`;
 
   // Create tabs - one for each cat image
   const tabs = catImages.map((image, index) => ({
@@ -53,7 +57,7 @@ function App() {
     content: (
       <ImageContainer>
         <CatImage
-          src={`/cat/${image}`}
+          src={`${imagePath}/${image}`}
           alt={`Hans ${index + 1}: ${image}`}
           onError={(e) => {
             console.error('Failed to load image:', image);
