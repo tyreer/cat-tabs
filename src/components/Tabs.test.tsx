@@ -221,4 +221,88 @@ describe('Tabs Component', () => {
       expect(secondTab).toHaveFocus();
     });
   });
+
+  describe('Automatic Activation & Focus Management', () => {
+    it('activates tab when focused', async () => {
+      const user = userEvent.setup();
+      render(<Tabs tabs={mockTabs} />);
+      
+      const secondTab = screen.getByRole('tab', { name: 'Tab 2' });
+      await user.click(secondTab);
+      
+      expect(secondTab).toHaveAttribute('aria-selected', 'true');
+      expect(screen.getByText('Content 2')).toBeVisible();
+    });
+
+    it('calls onTabChange when tab is focused and activated', async () => {
+      const onTabChange = vi.fn();
+      const user = userEvent.setup();
+      render(<Tabs tabs={mockTabs} onTabChange={onTabChange} />);
+      
+      const secondTab = screen.getByRole('tab', { name: 'Tab 2' });
+      await user.click(secondTab);
+      
+      expect(onTabChange).toHaveBeenCalledWith(mockTabs[1]);
+    });
+
+    it('does not activate already active tab when focused', async () => {
+      const onTabChange = vi.fn();
+      const user = userEvent.setup();
+      render(<Tabs tabs={mockTabs} onTabChange={onTabChange} />);
+      
+      const firstTab = screen.getByRole('tab', { name: 'Tab 1' });
+      await user.click(firstTab);
+      
+      // Clear previous calls
+      onTabChange.mockClear();
+      
+      // Focus the already active tab using Tab key navigation
+      await user.keyboard('{Tab}');
+      await user.keyboard('{Shift>}{Tab}{/Shift}');
+      
+      // Should not call onTabChange for already active tab
+      expect(onTabChange).not.toHaveBeenCalled();
+    });
+
+    it('works with Tab key to exit tablist', async () => {
+      const user = userEvent.setup();
+      render(<Tabs tabs={mockTabs} />);
+      
+      const firstTab = screen.getByRole('tab', { name: 'Tab 1' });
+      await user.click(firstTab);
+      
+      // Tab key should move focus away from tablist
+      await user.keyboard('{Tab}');
+      
+      // Focus should move to the next focusable element
+      expect(firstTab).not.toHaveFocus();
+    });
+
+    it('integrates automatic activation with keyboard navigation', async () => {
+      const user = userEvent.setup();
+      render(<Tabs tabs={mockTabs} />);
+      
+      const firstTab = screen.getByRole('tab', { name: 'Tab 1' });
+      await user.click(firstTab);
+      
+      // Use arrow key to navigate
+      await user.keyboard('{ArrowRight}');
+      
+      const secondTab = screen.getByRole('tab', { name: 'Tab 2' });
+      expect(secondTab).toHaveAttribute('aria-selected', 'true');
+      expect(secondTab).toHaveFocus();
+      expect(screen.getByText('Content 2')).toBeVisible();
+    });
+
+    it('maintains focus management with controlled mode', async () => {
+      const user = userEvent.setup();
+      render(<Tabs tabs={mockTabs} activeTabId="tab2" />);
+      
+      const secondTab = screen.getByRole('tab', { name: 'Tab 2' });
+      await user.click(secondTab);
+      
+      // Focus should work even in controlled mode
+      expect(secondTab).toHaveFocus();
+    });
+  });
 });

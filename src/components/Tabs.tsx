@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import React, { useCallback, useState, useRef, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 
 export interface TabObject {
@@ -62,21 +62,15 @@ const StyledTabPanel = styled.div<{ $isActive: boolean }>`
   min-height: 200px;
 `;
 
-const TabList = React.forwardRef<HTMLDivElement, {
-  children: ReactNode;
-  onKeyDown?: (event: React.KeyboardEvent) => void;
-} & React.HTMLAttributes<HTMLDivElement>>(({
-  children,
-  onKeyDown,
-  ...props
-}, ref) => {
+const TabList = React.forwardRef<
+  HTMLDivElement,
+  {
+    children: ReactNode;
+    onKeyDown?: (event: React.KeyboardEvent) => void;
+  } & React.HTMLAttributes<HTMLDivElement>
+>(({ children, onKeyDown, ...props }, ref) => {
   return (
-    <StyledTabList 
-      ref={ref}
-      role="tablist" 
-      onKeyDown={onKeyDown}
-      {...props}
-    >
+    <StyledTabList ref={ref} role="tablist" onKeyDown={onKeyDown} {...props}>
       {children}
     </StyledTabList>
   );
@@ -87,13 +81,21 @@ function Tab({
   isActive,
   onClick,
   onKeyDown,
+  onFocus,
   ...props
 }: {
   tab: TabObject;
   isActive: boolean;
   onClick: () => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
+  onFocus?: (tabId: string) => void;
 } & React.HTMLAttributes<HTMLButtonElement>) {
+  const handleFocus = useCallback(() => {
+    if (onFocus) {
+      onFocus(tab.id);
+    }
+  }, [onFocus, tab.id]);
+
   return (
     <StyledTab
       id={`tab-${tab.id}`}
@@ -102,6 +104,7 @@ function Tab({
       $isActive={isActive}
       onClick={onClick}
       onKeyDown={onKeyDown}
+      onFocus={handleFocus}
       {...props}
     >
       {tab.label}
@@ -168,34 +171,56 @@ export default function Tabs({
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       const { key } = event;
-      
+
       if (key === 'ArrowLeft' || key === 'ArrowRight') {
         event.preventDefault();
-        
-        const currentIndex = tabs.findIndex(tab => tab.id === currentActiveTabId);
+
+        const currentIndex = tabs.findIndex(
+          (tab) => tab.id === currentActiveTabId
+        );
         let nextIndex: number;
-        
+
         if (key === 'ArrowLeft') {
           nextIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
         } else {
           nextIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0;
         }
-        
+
         const nextTab = tabs[nextIndex];
         if (nextTab) {
           // Update the active tab first
           if (!isControlled) {
             setInternalActiveTabId(nextTab.id);
           }
-          
+
           // Call the callback
           if (onTabChange) {
             onTabChange(nextTab);
           }
-          
+
           // Focus the next tab
-          const nextTabElement = tabListRef.current?.querySelector(`#tab-${nextTab.id}`) as HTMLButtonElement;
+          const nextTabElement = tabListRef.current?.querySelector(
+            `#tab-${nextTab.id}`
+          ) as HTMLButtonElement;
           nextTabElement?.focus();
+        }
+      }
+    },
+    [tabs, currentActiveTabId, isControlled, onTabChange]
+  );
+
+  // Handle focus events for automatic activation
+  const handleTabFocus = useCallback(
+    (tabId: string) => {
+      // Only activate if the tab is not already active
+      if (tabId !== currentActiveTabId) {
+        if (!isControlled) {
+          setInternalActiveTabId(tabId);
+        }
+
+        const focusedTab = tabs.find((tab) => tab.id === tabId);
+        if (focusedTab && onTabChange) {
+          onTabChange(focusedTab);
         }
       }
     },
@@ -204,10 +229,7 @@ export default function Tabs({
 
   return (
     <StyledTabsContainer>
-      <TabList 
-        ref={tabListRef}
-        aria-label={ariaLabel}
-      >
+      <TabList ref={tabListRef} aria-label={ariaLabel}>
         {tabs.map((tab) => (
           <Tab
             key={tab.id}
@@ -215,6 +237,7 @@ export default function Tabs({
             isActive={tab.id === currentActiveTabId}
             onClick={() => handleTabClick(tab.id)}
             onKeyDown={handleKeyDown}
+            onFocus={handleTabFocus}
           />
         ))}
       </TabList>
