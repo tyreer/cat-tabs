@@ -171,7 +171,7 @@ function App() {
 
 ### With Custom Styling
 
-The component uses styled-components with a retro Windows 95 aesthetic, following [CSS margin best practices](https://mxstbr.com/thoughts/margin):
+The component uses styled-components with a 90s style:
 
 - **3D Beveled Effects** - Classic raised/inset button styling
 - **Retro Color Scheme** - Gray backgrounds with blue accents
@@ -254,7 +254,7 @@ This implementation follows established best practices and guidelines:
 
 - **[W3C ARIA Authoring Practices Guide - Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)** - Official accessibility guidelines for tab interfaces
 - **[Testing Library Query Priority Guidelines](https://testing-library.com/docs/queries/about#priority)** - Best practices for semantic testing queries
-- **[CSS Margin Best Practices](https://mxstbr.com/thoughts/margin)** - Guidelines for spacing and layout in styled-components
+- **[[Margin considered harmful]](https://mxstbr.com/thoughts/margin)** - Guidelines for spacing and layout via Max Stoiber
 
 These resources informed our implementation decisions for accessibility, testing, and styling approaches.
 
